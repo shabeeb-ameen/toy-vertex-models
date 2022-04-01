@@ -16,5 +16,18 @@ The polygon class is equipped with shape parameter and stiffness constsnts, and 
 
 2. functions.py:
 
+the following routines are modeular:
+
+(a) fourcell_plotter is useful for plotting vertex models given tertices and edges. Currently works in 2D, but shouldnt be hard to extend to 3D (which would be useful for small toy models)
+(b) vertex_monte carlo is a random-guessing method of 
+
 (some of these functions are throwaway-code/ numerical routines relevant only to this particular project)
 
+
+#######################################
+
+Further dvelopment ideas:
+
+(i) Exception handling in the dynamics code to avoid geometrically inconsistent cells. Currently we are doing this "by eye" but that wouldnt work inlarge models.
+(ii) Find ways to make some of the throwaway code more modular. 
+(iii) Automate the reconnection event reconnection process. Requires more thought!
