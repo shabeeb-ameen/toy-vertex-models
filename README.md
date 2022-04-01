@@ -5,7 +5,7 @@ The geometrical configuration of a valid vertex model requires (i) spatial coord
 
 1. Contents of classes.py:
 
-(The classes in this file were designed to be modular and can be used for both 2D and 3D models, and outside the scope of the current work.)
+(The classes in this file were designed to be modular and can be used for both 2D and 3D models, even outside the scope of the current work.)
 
 
 (a) Vertex: These only serve as containers for vertex spatial coordinates; which can be 2 or 3D (but Cartesian!)
