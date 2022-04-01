@@ -6,8 +6,7 @@ import pylab as pl
 from matplotlib import collections  as mc
 
 
-## Usage guide: create vertex instances with coordinates in the form [x,y] or [x,y,z] 
-
+## Usage guide: initialize vertex instances with Vertex([x,y]) or Vertex([x,y,z])
 
 class Vertex:
     num_vertices=0
@@ -17,20 +16,52 @@ class Vertex:
         Vertex.num_vertices+=1
 
     @classmethod
-    def reflector(cls, array, axis):
-        if axis=="x":
+    def reflector(cls, arr, axis):
+        array=copy.deepcopy(arr)
+        #2D reflectors:
+        if axis=="++":
+            return cls(array)
+        if axis=="+-":
             array[1]*=-1
-        if axis=="y":
+            return cls(array)
+        if axis=="-+":
             array[0]*=-1
-        if axis=="xy":
+            return cls(array)
+        if axis=="--":
+            array[0]*=-1
+            array[1]*=-1
+            return cls(array)
+        #3D reflectors:
+        if axis=="+++":
+            return cls(array)
+        if axis=="++-":
             array[2]*=-1
-        if axis=="xz":
+            return cls(array)
+        if axis=="+-+":
             array[1]*=-1
-        if axis=="yz":
+            return cls(array)
+        if axis=="+--":
+            array[2]*=-1
+            array[1]*=-1
+            return cls(array)
+        
+        if axis=="-++":
             array[0]*=-1
+            return cls(array)
 
-        return cls(array)
-
+        if axis=="-+-":
+            array[2]*=-1
+            array[0]*=-1
+        if axis=="--+":
+            array[1]*=-1
+            array[0]*=-1   
+            return cls(array)
+        if axis=="---":
+            array[2]*=-1
+            array[1]*=-1
+            array[0]*=-1   
+            return cls(array)
+                
 ## Usage guide: create edge instances with vertex objects 
 ## ... don't put them in a list; eg if v1,v2 are connected vertex objects, 
 ## e1=Edge(v1,v2) makes the edge object.
@@ -45,7 +76,10 @@ class Edge:
         Edge.num_edges+=1
     def length(self):
         return scipy.spatial.distance.euclidean(self.vert_a.coordinates,self.vert_b.coordinates)
-        
+
+    
+    
+## Usage guide: Initialization with Polygon([<list of edge objects>])    
 class Polygon:
     num_polygons=0
     p_0=None
@@ -86,9 +120,9 @@ class Polyhedron:
     def __init__(self,polygons):
         self.polygons=polygons
 
-        ## this is not necessarily the center of mass of the polyhedron, its just a convenient inside-point
+    ## this is not necessarily the center of mass of the polyhedron, its just a convenient inside-point
         self.polyhedron_center=np.mean([poly.polygon_center for poly in self.polygons],axis=0)
-    
+        Polyhedron.num_polyhedrons+=1
     def surface_area(self):
         return np.sum([poly.area for poly in self.polygons])
 
