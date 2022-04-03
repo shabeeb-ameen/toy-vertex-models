@@ -10,6 +10,8 @@ from classes import Vertex, Edge, Polygon
 # A function that returns randomized positions for generator points, which respect 
 # (a) a specified orientation of the driven edge
 # (b) symmetry
+
+
 def gen_rnd_2D(l,p,q,epsilon,state=None):
     p_f=copy.deepcopy(p)
     q_f=copy.deepcopy(q)
@@ -57,26 +59,26 @@ def plotter_2D(edges):
  #   return
 
 #plotting function in 3 dimensions. Can these two be incorporated into a single function? (is it necessary?)
-def plotter_3D(verts,edges):
-    points=[v.coordinates for v in verts]
+#def plotter_3D(verts, edges):
+#    points=[v.coordinates for v in verts]
+#
+#    fig = plt.figure(figsize=(8,8), dpi=80)
+#    ax  = fig.add_subplot(111, projection = '3d')
+#
+#    ax.scatter(*zip(*points))
+#
+#    for e in edges:
+#    
+#        nodes=[e.vert_a.coordinates,  e.vert_b.coordinates]
+#        ax.plot(*zip(*nodes), color = 'b')
 
-    fig = plt.figure(figsize=(8,8), dpi=80)
-    ax  = fig.add_subplot(111, projection = '3d')
 
-    ax.scatter(*zip(*points))
-
-    for e in edges:
-    
-        nodes=[e.vert_a.coordinates,  e.vert_b.coordinates]
-        ax.plot(*zip(*nodes), color = 'b')
-
-
-    ax.set_xlabel('$X$')
-    ax.set_ylabel('$Y$')
-    ax.set_zlabel('$Z$')
-    ax.yaxis._axinfo['label']['space_factor'] = 4.0
-    #plt.show()
-    return
+#    ax.set_xlabel('$X$')
+#    ax.set_ylabel('$Y$')
+#    ax.set_zlabel('$Z$')
+#    ax.yaxis._axinfo['label']['space_factor'] = 4.0
+#    #plt.show()
+#    return
 
 def fourcell_vertex_scatter(verts):
     p=[v.coordinates for v in verts]

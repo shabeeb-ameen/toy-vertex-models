@@ -1,6 +1,6 @@
 Basic Outline:
 
-The geometrical configuration of a valid vertex model requires (i) spatial coordinates for all vertices, and(ii) edge connections between them. A slight overspecification (where edges/ polygonal surfaces constituing each cell is also specified) is helpful in the energy-evaluation context, for both two and three dimensions for the . Here we take an object-oriented approach to describing minimal vertex models and their dynamics using the following  tools:
+The geometrical configuration of a valid vertex model requires (i) spatial coordinates for all vertices, and(ii) edge connections between them. A slight overspecification (where edges/ polygonal surfaces constituing each cell is also specified) is helpful in the energy-evaluation context, for both two and three dimensions for the . Here we take an object-oriented approach to describing minimal vertex models and their dynamics using the contents in the following code:
 
 
 1. Contents of classes.py:
@@ -14,20 +14,14 @@ The geometrical configuration of a valid vertex model requires (i) spatial coord
 The polygon class is equipped with shape parameter and stiffness constsnts, and an energy functional - this energy is for 2D woek only.
 (d) Polyhedron: A further useful overrepresentation for 3D, storing the polygons that make up a given cell surface. The/shape parameter constsnts and energy function in this class is relevant in 3D.
 
-2. functions.py:
+Basic usage guides for these classes are commented on the code.
 
-the following routines are modeular:
-
-(a) fourcell_plotter is useful for plotting vertex models given tertices and edges. Currently works in 2D, but shouldnt be hard to extend to 3D (which would be useful for small toy models)
-(b) vertex_monte carlo is a random-guessing method of 
-
-(some of these functions are throwaway-code/ numerical routines relevant only to this particular project)
 
 
 #######################################
 
 Further dvelopment ideas:
 
-(i) Exception handling in the dynamics code to avoid geometrically inconsistent cells. Currently we are doing this "by eye" but that wouldnt work inlarge models.
-(ii) Find ways to make some of the throwaway code more modular. 
-(iii) Automate the reconnection event reconnection process. Requires more thought!
+(i) Exception handling in the dynamics code to avoid geometrically inconsistent cells. Currently we are doing this "by eye" but that wouldnt work in large models.
+
+(ii) Automate the reconnection event reconnection process. Requires more thought!

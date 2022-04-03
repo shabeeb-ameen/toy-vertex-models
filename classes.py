@@ -7,6 +7,8 @@ from matplotlib import collections  as mc
 
 
 ## Usage guide: initialize vertex instances with Vertex([x,y]) or Vertex([x,y,z])
+## Use the reflector as an alternate constructor to implement reflection symmetries from generator points.
+
 
 class Vertex:
     num_vertices=0
@@ -65,7 +67,8 @@ class Vertex:
 ## Usage guide: create edge instances with vertex objects 
 ## ... don't put them in a list; eg if v1,v2 are connected vertex objects, 
 ## e1=Edge(v1,v2) makes the edge object.
-## Note: e1=Edge(v2,v1) would also work! For this problem, it doesnt matter. its a choice we can make while inputting the data.
+## Note: e1=Edge(v2,v1) would also work! For this problem, this ambiguity doesnt matter. 
+## its just a choice we can make while inputting the data.
 class Edge:
     num_edges=0
     def __init__(self, vert_a, vert_b):
@@ -79,7 +82,8 @@ class Edge:
 
     
     
-## Usage guide: Initialization with Polygon([<list of edge objects>])    
+## Usage guide: Initialization with Polygon([<list of edge objects>])
+# Warning: in order to use the energy function, you need to initialize the parameters! 
 class Polygon:
     num_polygons=0
     p_0=None
@@ -114,7 +118,8 @@ class Polygon:
         energy+= (self.perimeter()/(Polygon.a_0)**(1/2)-Polygon.p_0)**2
         return energy
 
-
+## Usage guide: Initialization with Polygon([<list of edge objects>])
+## Warning: in order to use the energy function, you need to initialize the parameters! 
 class Polyhedron:
     num_polyhedrons=0
 
