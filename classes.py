@@ -117,6 +117,11 @@ class Polygon:
 
 class Polyhedron:
     num_polyhedrons=0
+
+    s_0=None
+    v_0=None
+    k_v=None
+
     def __init__(self,polygons):
         self.polygons=polygons
 
@@ -137,4 +142,11 @@ class Polyhedron:
                 e_2=np.append(edge.vert_b.coordinates,1)
                 volume+=abs(np.linalg.det([c,d,e_1,e_2]))/6
         return volume
+
+    def energy(self):
+        energy=0
+        energy+= Polyhedron.k_v*(self.volume()/Polyhedron.v_0-1)**2
+        energy+= (self.surface_area()/(Polyhedron.v_0)**(2/3)-Polyhedron.s_0)**2
+        return energy
+
    

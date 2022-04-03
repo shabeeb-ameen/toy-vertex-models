@@ -7,73 +7,54 @@ from matplotlib import collections  as mc
 from classes import Vertex, Edge, Polygon
 
 
+# A function that returns randomized positions for generator points, which respect 
+# (a) a specified orientation of the driven edge
+# (b) symmetry
+def gen_rnd_2D(l,p,q,epsilon,state=None):
+    p_f=copy.deepcopy(p)
+    q_f=copy.deepcopy(q)
+    rng_p=2*epsilon*np.subtract(np.random.rand(len(p),len(p[0])),np.full((len(p),len(p[0])),1/2))
+    rng_q=2*epsilon*np.subtract(np.random.rand(len(q),len(q[0])),np.full((len(q),len(q[0])),1/2))
+
+    p_f=np.add(p_f,rng_p)
+    q_f=np.add(q_f,rng_q)
 
 
-## Pre configuration edge and polygon assignments
+    #some values need to be fixed to preserve symmetry:
+    q_f[1][1]=0
 
-def edge_assignments(verts):
-    edges=[]
-    edges.append(Edge(verts[0],verts[1]))
-    edges.append(Edge(verts[1],verts[2]))
-    edges.append(Edge(verts[2],verts[3]))
-    edges.append(Edge(verts[3],verts[4]))
-    edges.append(Edge(verts[4],verts[5]))
-    edges.append(Edge(verts[5],verts[0]))
+    #finally, the driven point needs to be on axis:
+    if state==None: p_f[0]=[l/2,0]
+    if state=="post": p_f[0]=[0,l/2]
+    return p_f,q_f
 
-    edges.append(Edge(verts[5],verts[6]))
-    edges.append(Edge(verts[6],verts[7]))
-    edges.append(Edge(verts[7],verts[8]))
-    edges.append(Edge(verts[8],verts[9]))
-    edges.append(Edge(verts[9],verts[0]))
-
-    edges.append(Edge(verts[9],verts[10]))
-    edges.append(Edge(verts[10],verts[11]))
-    edges.append(Edge(verts[11],verts[12]))
-    edges.append(Edge(verts[12],verts[1]))
+def gen_rnd_3D(l,p,q,epsilon,state=None):
+    pass
 
     
-    edges.append(Edge(verts[12],verts[13]))
-    edges.append(Edge(verts[13],verts[14]))
-    edges.append(Edge(verts[14],verts[15]))
-    edges.append(Edge(verts[15],verts[2]))
-
-    return edges
-
-
-def polygon_assignment(edges):
-    polygons=[]
-    polygons.append(Polygon([edges[0],edges[1],edges[2],edges[3],edges[4],edges[5]]))
-    polygons.append(Polygon([edges[5],edges[6],edges[7],edges[8],edges[9],edges[10]]))
-    polygons.append(Polygon([edges[0],edges[10],edges[11],edges[12],edges[13],edges[14]]))
-    polygons.append(Polygon([edges[14],edges[15],edges[16],edges[17],edges[18],edges[1]]))
-    return polygons
-
-
-#plotting functions in two dimentsions
-
 def plotter_2D(edges):
     lines = [[e.vert_a.coordinates,e.vert_b.coordinates]for e in edges]
     lc = mc.LineCollection(lines, linewidths=2)
+    
     fig, ax = pl.subplots()
     ax.add_collection(lc)
     ax.autoscale()
     ax.margins(0.1)
     for line in lines:     
         plt.scatter(*zip(*line))
-    plt.show
+    #plt.show()
     return
 
-def fourcell_plotter(verts,edges):
-    lines = [[e.vert_a.coordinates,e.vert_b.coordinates]for e in edges]
-    lc = mc.LineCollection(lines, linewidths=2)
-    fig, ax = pl.subplots()
-    ax.add_collection(lc)
-    ax.autoscale()
-    ax.margins(0.1)
-    p=[v.coordinates for v in verts]
-    plt.scatter(*zip(*p))
-    plt.show
-    return
+#def fourcell_plotter(verts,edges):
+##    lines = [[e.vert_a.coordinates,e.vert_b.coordinates]for e in edges]
+ #   lc = mc.LineCollection(lines, linewidths=2)
+ #   fig, ax = pl.subplots()
+ #   ax.add_collection(lc)
+ #   ax.autoscale()
+ #   ax.margins(0.1)
+ #   p=[v.coordinates for v in verts]
+ #   plt.scatter(*zip(*p))
+ #   return
 
 #plotting function in 3 dimensions. Can these two be incorporated into a single function? (is it necessary?)
 def plotter_3D(verts,edges):
@@ -94,12 +75,13 @@ def plotter_3D(verts,edges):
     ax.set_ylabel('$Y$')
     ax.set_zlabel('$Z$')
     ax.yaxis._axinfo['label']['space_factor'] = 4.0
-    plt.show()
+    #plt.show()
+    return
 
 def fourcell_vertex_scatter(verts):
     p=[v.coordinates for v in verts]
     plt.scatter(*zip(*p))
-    plt.show
+    #plt.show
     return
 
 
@@ -118,24 +100,3 @@ def vertex_randomizer(v,l,epsilon):
 
     return verts
 
-
-def vertex_monte_carlo(verts,l,epsilon,trials):
-    n=0
-    verts_final=vertex_randomizer(verts,l,epsilon)
-    edges_test=edge_assignments(verts_final)
-    polygons_test=polygon_assignment(edges_test)
-    
-    energy=np.sum( [p.energy() for p in polygons_test])
-    while n<trials:
-        verts_test=vertex_randomizer(verts,l,epsilon)
-    
-    
-        edges_test=edge_assignments(verts_test)
-        polygons_test=polygon_assignment(edges_test)
-
-        if np.sum([p.energy() for p in polygons_test])<energy:
-            verts_final=copy.deepcopy(verts_test)
-            energy=np.sum( [p.energy() for p in polygons_test])
-        n+=1
-    
-    return verts_final

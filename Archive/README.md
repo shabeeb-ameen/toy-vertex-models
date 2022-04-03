@@ -1,0 +1,3 @@
+"Everything the light touches is our kingdom." - Lion King
+
+This folder/hyena's den only contains throwaway code, test notebooks and failed experiments. Here for a good laugh, and eradication when Simba is bug-free...
