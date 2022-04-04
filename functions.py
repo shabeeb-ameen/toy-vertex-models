@@ -31,7 +31,24 @@ def gen_rnd_2D(l,p,q,epsilon,state=None):
     return p_f,q_f
 
 def gen_rnd_3D(l,p,q,epsilon,state=None):
-    pass
+    p_f=copy.deepcopy(p)
+    q_f=copy.deepcopy(q)
+    rng_p=2*epsilon*np.subtract(np.random.rand(len(p),len(p[0])),np.full((len(p),len(p[0])),1/2))
+    rng_q=2*epsilon*np.subtract(np.random.rand(len(q),len(q[0])),np.full((len(q),len(q[0])),1/2))
+
+    p_f=np.add(p_f,rng_p)
+    q_f=np.add(q_f,rng_q)
+
+
+    #again, some values need to be fixed to preserve symmetry:
+    q_f[2][2]=0
+    q_f[3][2]=0
+    q_f[4][2]=0
+
+    #finally, the driven point needs to be on axis:
+    if state==None: p_f[0]=[l/2,l/2,0]
+    if state=="post": p_f[0]=[0,0,l/2]
+    return p_f,q_f
 
     
 def plotter_2D(edges):

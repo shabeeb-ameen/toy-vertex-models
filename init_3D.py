@@ -26,16 +26,6 @@ q.append([5*L/2,3*L/2,0])
 q.append([3*L/2,3*L/2,0])
 q.append([7*L/2,L/2,0])
 
-#q.append([3*L/2,3*L/2,0])
-#q.append([L,L,-L/(2)**(1/2)])
-#q.append([3*L/2,5*L/2,0])
-#q.append([L,3*L,L/(2)**(1/2)])
-#q.append([L,3*L,-L/(2)**(1/2)])
-#q.append([L/2,5*L/2,2*L/(2)**(1/2)])
-#q.append([L/2,3*L/2,-2*L/(2)**(1/2)])
-#q.append([L/2,5*L/2,-2*L/(2)**(1/2)])
-#q.append([L/2,7*L/2,0])
-
 
 fig = plt.figure(figsize=(4,4), dpi=1080)
 ax  = fig.add_subplot(111, projection = '3d')
@@ -57,7 +47,8 @@ ax.text(3*L,L,L/(2)**(1/2), "  q_1",size=2, zorder=1)
 ax.text(5*L/2,3*L/2,0, "  q_2",size=2, zorder=1)
 ax.text(3*L/2,3*L/2,0, "  q_3",size=2, zorder=1)
 ax.text(7*L/2,L/2,0, "  q_4",size=2, zorder=1)
-plt.show()
+plt.savefig("Figures/3D/3D_generator_points.png",dpi=1080,bbox_inches="tight",transparent=False)
+plt.close(fig)
 
 #Edge assignments. The state variable is null by default. After the transition, use state="post" for the new edge assignments 
 def edge_assignments_cell_1(p_0,q_0, state=None):
@@ -301,11 +292,26 @@ def edge_assignments_cell_2(p_0,q_0, state=None):
 
 
 
-def polygon_assignments_3D(p_0,q_0, state=None):
-    pass
+def polygon_assignments_cell_1(p,q, state=None):
+    polys=[]
+    for e in edge_assignments_cell_1(p,q,state):
+        polys.append(Polygon(e))
+    return polys
 
-def polyhedron_assignments (p_0,q_0, state=None):
-    pass
+def polygon_assignments_cell_2(p,q, state=None):
+    polys=[]
+    for e in edge_assignments_cell_2(p,q,state):
+        polys.append(Polygon(e))
+    return polys
+        
+
+
+def polyhedron_assignments (p,q, state=None):
+    phdrons=[]
+    phdrons.append(Polyhedron(polygon_assignments_cell_1(p,q,state)))
+    phdrons.append(Polyhedron(polygon_assignments_cell_2(p,q,state)))
+    return phdrons
+    
 
 def plotter_3D(edges):
     lines=[[e.vert_a.coordinates, e.vert_b.coordinates] for e in edges]
@@ -325,6 +331,6 @@ def plotter_3D(edges):
     ax.set_ylabel('$Y$')
     ax.set_zlabel('$Z$')
     ax.yaxis._axinfo['label']['space_factor'] = 4.0
-    #plt.show()
-    return
+    
+    return 
 

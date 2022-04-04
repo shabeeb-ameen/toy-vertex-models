@@ -91,9 +91,10 @@ def polygon_assignments(p,q, state=None):
 
     polys=[Polygon(e1),Polygon(e2),Polygon(e3),Polygon(e4)]
     return polys
+
+
 cos_30=3**(1/2)/2
 l=1
-
 p=[]
 
 p.append([l/2,0])

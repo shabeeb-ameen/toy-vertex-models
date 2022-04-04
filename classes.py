@@ -134,7 +134,8 @@ class Polyhedron:
         self.polyhedron_center=np.mean([poly.polygon_center for poly in self.polygons],axis=0)
         Polyhedron.num_polyhedrons+=1
     def surface_area(self):
-        return np.sum([poly.area for poly in self.polygons])
+
+        return np.sum([poly.area() for poly in self.polygons])
 
     ## The volume function breaks up the cocave hulls int    
     def volume(self):
