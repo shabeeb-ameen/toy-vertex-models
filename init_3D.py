@@ -163,7 +163,8 @@ def edge_assignments_cell_1(p_0,q_0, state=None):
         e1_f4.append(Edge(Vertex.reflector(p[5],"+-+"),Vertex.reflector(p[5],"--+")))
         e1_f4.append(Edge(Vertex.reflector(p[5],"--+"),Vertex.reflector(p[5],"-++")))
         e1_f4.append(Edge(Vertex.reflector(p[5],"-++"),Vertex(p[5])))
-    return e1_f0,e1_f1a,e1_f1b,e1_f1c,e1_f1d,e1_f2a, e1_f2b, e1_f2c, e1_f2d, e1_f3a,e1_f3b, e1_f3c, e1_f3d, e1_f4
+    array_of_polygon_edges=[e1_f0,e1_f1a,e1_f1b,e1_f1c,e1_f1d,e1_f2a, e1_f2b, e1_f2c, e1_f2d, e1_f3a,e1_f3b, e1_f3c, e1_f3d, e1_f4]
+    return array_of_polygon_edges
 
 
 def edge_assignments_cell_2(p_0,q_0, state=None):
@@ -285,7 +286,8 @@ def edge_assignments_cell_2(p_0,q_0, state=None):
         e2_f4.append(Edge(Vertex.reflector(q[0],"+--"),Vertex.reflector(p[3],"+--")))
         e2_f4.append(Edge(Vertex.reflector(p[3],"+--"),Vertex.reflector(p[3],"++-")))
 
-    return e2_f0,e2_f1a,e2_f1b,e2_f1c,e2_f1d,e2_f2a, e2_f2b, e2_f2c, e2_f2d, e2_f3a,e2_f3b, e2_f3c, e2_f3d, e2_f4
+    array_of_polygon_edges= [e2_f0,e2_f1a,e2_f1b,e2_f1c,e2_f1d,e2_f2a, e2_f2b, e2_f2c, e2_f2d, e2_f3a,e2_f3b, e2_f3c, e2_f3d, e2_f4]
+    return array_of_polygon_edges
 
 
 
@@ -294,13 +296,15 @@ def edge_assignments_cell_2(p_0,q_0, state=None):
 
 def polygon_assignments_cell_1(p,q, state=None):
     polys=[]
-    for e in edge_assignments_cell_1(p,q,state):
+    edges=edge_assignments_cell_1(p,q,state)
+    for e in edges:
         polys.append(Polygon(e))
     return polys
 
 def polygon_assignments_cell_2(p,q, state=None):
     polys=[]
-    for e in edge_assignments_cell_2(p,q,state):
+    edges=edge_assignments_cell_2(p,q,state)
+    for e in edges:
         polys.append(Polygon(e))
     return polys
         
@@ -308,8 +312,10 @@ def polygon_assignments_cell_2(p,q, state=None):
 
 def polyhedron_assignments (p,q, state=None):
     phdrons=[]
-    phdrons.append(Polyhedron(polygon_assignments_cell_1(p,q,state)))
-    phdrons.append(Polyhedron(polygon_assignments_cell_2(p,q,state)))
+    polygon_list_1=polygon_assignments_cell_1(p,q,state)
+    polygon_list_2=polygon_assignments_cell_2(p,q,state)
+    phdrons.append(Polyhedron(polygon_list_1))
+    phdrons.append(Polyhedron(polygon_list_2))
     return phdrons
     
 

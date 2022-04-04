@@ -137,7 +137,7 @@ class Polyhedron:
 
         return np.sum([poly.area() for poly in self.polygons])
 
-    ## The volume function breaks up the cocave hulls int    
+    ## The volume function works by reaking up the cells into tetrahedra (edge,polygon center, polyhedron center.    
     def volume(self):
         volume=0
         c=np.append(self.polyhedron_center,1)
@@ -150,9 +150,12 @@ class Polyhedron:
         return volume
 
     def energy(self):
+        
+        dls_vol=self.volume()/Polyhedron.v_0
+        dls_sa=self.surface_area()/(Polyhedron.v_0)**(2/3)
         energy=0
-        energy+= Polyhedron.k_v*(self.volume()/Polyhedron.v_0-1)**2
-        energy+= (self.surface_area()/(Polyhedron.v_0)**(2/3)-Polyhedron.s_0)**2
+        energy+= Polyhedron.k_v*(dls_vol-1)**2
+        energy+= (dls_sa-Polyhedron.s_0)**2
         return energy
 
    
