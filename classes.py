@@ -7,7 +7,11 @@ from matplotlib import collections  as mc
 
 
 ## Usage guide: initialize vertex instances with Vertex([x,y]) or Vertex([x,y,z])
+
+
 ## Use the reflector as an alternate constructor to implement reflection symmetries from generator points.
+
+## Further development idea: maybe the polygon and polyhedron classes should also have such constructors!
 
 
 class Vertex:
