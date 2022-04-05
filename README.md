@@ -30,6 +30,8 @@ Contains useful functions for, e.g visualization tools (plotting,gif making), de
 
 The code here is project-specific. Contains project-specific routines (eg the "monte carlo routine"), initializations (e.g generator points and randomizers) and lots of "not-general-purpose" debugging scripts.
 
+4. Figures folder
+Where the dinner is served...
 
 ###########################################
 How the randomized evolution process works:
