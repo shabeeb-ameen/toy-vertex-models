@@ -18,8 +18,11 @@ class Vertex:
         Vertex.num_vertices+=1
 
     @classmethod
-    def reflector(cls, arr, axis):
+    def reflector(cls, arr, axis=None):
         array=copy.deepcopy(arr)
+        #Identity Mapping:
+        if axis==None:
+            return array
         #2D reflectors:
         if axis=="++":
             return cls(array)
@@ -119,7 +122,8 @@ class Polygon:
         return energy
 
 ## Usage guide: Initialization with Polygon([<list of edge objects>])
-## Warning: in order to use the energy function, you need to initialize the parameters! 
+
+## Warning: in order to use the energy function, you need to initialize the s_0, v_0, k_v parameters! 
 class Polyhedron:
     num_polyhedrons=0
 
