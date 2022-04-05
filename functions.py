@@ -7,49 +7,10 @@ from matplotlib import collections  as mc
 from classes import Vertex, Edge, Polygon
 
 
-# A function that returns randomized positions for generator points, which respect 
-# (a) a specified orientation of the driven edge
-# (b) symmetry
 
 
-def gen_rnd_2D(l,p,q,epsilon,state=None):
-    p_f=copy.deepcopy(p)
-    q_f=copy.deepcopy(q)
-    rng_p=2*epsilon*np.subtract(np.random.rand(len(p),len(p[0])),np.full((len(p),len(p[0])),1/2))
-    rng_q=2*epsilon*np.subtract(np.random.rand(len(q),len(q[0])),np.full((len(q),len(q[0])),1/2))
 
-    p_f=np.add(p_f,rng_p)
-    q_f=np.add(q_f,rng_q)
-
-
-    #some values need to be fixed to preserve symmetry:
-    q_f[1][1]=0
-
-    #finally, the driven point needs to be on axis:
-    if state==None: p_f[0]=[l/2,0]
-    if state=="post": p_f[0]=[0,l/2]
-    return p_f,q_f
-
-def gen_rnd_3D(l,p,q,epsilon,state=None):
-    p_f=copy.deepcopy(p)
-    q_f=copy.deepcopy(q)
-    rng_p=2*epsilon*np.subtract(np.random.rand(len(p),len(p[0])),np.full((len(p),len(p[0])),1/2))
-    rng_q=2*epsilon*np.subtract(np.random.rand(len(q),len(q[0])),np.full((len(q),len(q[0])),1/2))
-
-    p_f=np.add(p_f,rng_p)
-    q_f=np.add(q_f,rng_q)
-
-
-    #again, some values need to be fixed to preserve symmetry:
-    q_f[2][2]=0
-    q_f[3][2]=0
-    q_f[4][2]=0
-
-    #finally, the driven point needs to be on axis:
-    if state==None: p_f[0]=[l/2,l/2,0]
-    if state=="post": p_f[0]=[0,0,l/2]
-    return p_f,q_f
-
+## Further development idea: Frankly I am not too fond of how these  plotters output currently. Need to study matplotlib and get back on this case.
     
 def plotter_2D(edges):
     lines = [[e.vert_a.coordinates,e.vert_b.coordinates]for e in edges]
@@ -97,25 +58,32 @@ def plotter_2D(edges):
 #    #plt.show()
 #    return
 
-def fourcell_vertex_scatter(verts):
-    p=[v.coordinates for v in verts]
-    plt.scatter(*zip(*p))
-    #plt.show
-    return
 
+def plotter_3D(edges):
+    lines=[[e.vert_a.coordinates, e.vert_b.coordinates] for e in edges]
 
+    fig = plt.figure(figsize=(8,8), dpi=1080)
+    ax  = fig.add_subplot(111, projection = '3d')
+    for line in lines:
+        ax.scatter(*zip(*line))
 
-def vertex_randomizer(v,l,epsilon):
-    verts=copy.deepcopy(v)
-    d=len(verts[0].coordinates)
-    random=np.random.rand(d,len(verts))
+    for e in edges:
     
-    verts[0].coordinates[0]=l/2
-    verts[1].coordinates[0]=-l/2
-    
-    random=2*epsilon*np.random.rand(len(verts),d)-np.full((len(verts),d),epsilon)
-    for i in range (2,len(verts)):
-        verts[i].coordinates=np.add(verts[i].coordinates,random[i])
+        nodes=[e.vert_a.coordinates,  e.vert_b.coordinates]
+        ax.plot(*zip(*nodes), color = 'b')
 
-    return verts
+
+    ax.set_xlabel('$X$')
+    ax.set_ylabel('$Y$')
+    ax.set_zlabel('$Z$')
+    ax.yaxis._axinfo['label']['space_factor'] = 4.0
+    
+    return 
+
+
+#def fourcell_vertex_scatter(verts):
+#    p=[v.coordinates for v in verts]
+#    plt.scatter(*zip(*p))
+#    #plt.show
+#    return
 

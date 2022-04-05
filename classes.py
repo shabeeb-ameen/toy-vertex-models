@@ -11,7 +11,7 @@ from matplotlib import collections  as mc
 
 ## Use the reflector as an alternate constructor to implement reflection symmetries from generator points.
 
-## Further development idea: maybe the polygon and polyhedron classes should also have such constructors!
+## Further development idea: maybe the edge, polygon and polyhedron classes should also have such alternate constructors!
 
 
 class Vertex:
@@ -26,7 +26,7 @@ class Vertex:
         array=copy.deepcopy(arr)
         #Identity Mapping:
         if axis==None:
-            return array
+            return cls(array)
         #2D reflectors:
         if axis=="++":
             return cls(array)
@@ -74,8 +74,10 @@ class Vertex:
 ## Usage guide: create edge instances with vertex objects 
 ## ... don't put them in a list; eg if v1,v2 are connected vertex objects, 
 ## e1=Edge(v1,v2) makes the edge object.
+
 ## Note: e1=Edge(v2,v1) would also work! For this problem, this ambiguity doesnt matter. 
 ## its just a choice we can make while inputting the data.
+
 class Edge:
     num_edges=0
     def __init__(self, vert_a, vert_b):
