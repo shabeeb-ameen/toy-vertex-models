@@ -80,14 +80,13 @@ class Vertex:
 
 class Edge:
     num_edges=0
-    def __init__(self, vert_a, vert_b):
-        self.vert_a=vert_a
-        self.vert_b=vert_b
-        self.edge_width=scipy.spatial.distance.euclidean(self.vert_a.coordinates,self.vert_b.coordinates)
-        self.edge_center=np.mean([self.vert_a.coordinates,self.vert_b.coordinates],axis=0)
+    def __init__(self, vertices):
+        self.vertices=vertices
         Edge.num_edges+=1
     def length(self):
-        return scipy.spatial.distance.euclidean(self.vert_a.coordinates,self.vert_b.coordinates)
+        return scipy.spatial.distance.euclidean(self.vertices[0].coordinates,self.vertices[1].coordinates)
+    def edge_center(self):
+        return np.mean([self.vertices[0].coordinates,self.vertices[1].coordinates],axis=0)
 
     
     
@@ -103,9 +102,11 @@ class Polygon:
 
         self.edges=edges
         #self.edge_centers=[e.edge_center for e in self.edges]
-        self.polygon_center=np.mean([e.edge_center for e in self.edges],axis=0)
+        #self.polygon_center=np.mean([e.edge_center() for e in self.edges],axis=0)
         Polygon.num_polygons+=1
-        
+    
+    def polygon_center(self):
+        return np.mean([e.edge_center() for e in self.edges],axis=0)
     def perimeter(self):
         return np.sum([e.length() for e in self.edges])
 
@@ -115,8 +116,8 @@ class Polygon:
         area=0
         for edge in self.edges:
 
-            v1=np.subtract(edge.vert_a.coordinates,self.polygon_center)
-            v2=np.subtract(edge.vert_b.coordinates,self.polygon_center)
+            v1=np.subtract(edge.vertices[0].coordinates,self.polygon_center())
+            v2=np.subtract(edge.vertices[1].coordinates,self.polygon_center())
             area+=np.linalg.norm(np.cross(v1,v2))/2
         return area
     
@@ -139,33 +140,51 @@ class Polyhedron:
 
     def __init__(self,polygons):
         self.polygons=polygons
+        self.v_0=None
+    
+        #self.polyhedron_center=np.mean([poly.polygon_center() for poly in self.polygons],axis=0)
+        Polyhedron.num_polyhedrons+=1
 
     ## this is not necessarily the center of mass of the polyhedron, its just a convenient inside-point
-        self.polyhedron_center=np.mean([poly.polygon_center for poly in self.polygons],axis=0)
-        Polyhedron.num_polyhedrons+=1
+    def polyhedron_center(self):
+        return np.mean([poly.polygon_center() for poly in self.polygons],axis=0)
     def surface_area(self):
-
         return np.sum([poly.area() for poly in self.polygons])
 
     ## The volume function works by reaking up the cells into tetrahedra (edge,polygon center, polyhedron center.    
     def volume(self):
         volume=0
-        c=np.append(self.polyhedron_center,1)
+        c=np.append(self.polyhedron_center(),1)
         for poly in self.polygons:
-            d=np.append(poly.polygon_center,1)
+            d=np.append(poly.polygon_center(),1)
             for edge in poly.edges:
-                e_1=np.append(edge.vert_a.coordinates,1)
-                e_2=np.append(edge.vert_b.coordinates,1)
+                e_1=np.append(edge.vertices[0].coordinates,1)
+                e_2=np.append(edge.vertices[1].coordinates,1)
                 volume+=abs(np.linalg.det([c,d,e_1,e_2]))/6
         return volume
 
-    def energy(self):
-        
-        dls_vol=self.volume()/Polyhedron.v_0
-        dls_sa=self.surface_area()/(Polyhedron.v_0)**(2/3)
-        energy=0
-        energy+= Polyhedron.k_v*(dls_vol-1)**2
-        energy+= (dls_sa-Polyhedron.s_0)**2
-        return energy
+    #def energy(self):
+    #    #dimensionless volume, surface area
+    #    dls_vol=self.volume()/Polyhedron.v_0
+    #    dls_sa=self.surface_area()/(Polyhedron.v_0)**(2/3)
+    #    energy=0
+    #    energy+= Polyhedron.k_v*(dls_vol-1)**2
+    #    energy+= (dls_sa-Polyhedron.s_0)**2
+    #    return energy
 
-   
+    def volume_energy(self):
+        #dimensionless volume, surface area
+        dls_vol=self.volume()/self.v_0
+        energy=Polyhedron.k_v*(dls_vol-1)**2
+        #energy+= (dls_sa-Polyhedron.s_0)**2
+        return energy
+    def surface_energy(self):
+        #dimensionless volume, surface area
+        #dls_vol=self.volume()/self.v_0
+        dls_sa=self.surface_area()/(self.v_0)**(2/3)
+        energy=(dls_sa-Polyhedron.s_0)**2
+        return energy
+    def energy(self):
+        return self.volume_energy()+self.surface_energy()
+        #return self.volume_energy()
+        #return self.surface_energy()
