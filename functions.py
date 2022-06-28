@@ -60,7 +60,7 @@ def plotter_2D(edges):
 
 
 def plotter_3D(edges):
-    lines=[[e.vert_a.coordinates, e.vert_b.coordinates] for e in edges]
+    lines=[[e.vertices[0].coordinates, e.vertices[1].coordinates] for e in edges]
 
     fig = plt.figure(figsize=(8,8), dpi=1080)
     ax  = fig.add_subplot(111, projection = '3d')
@@ -69,7 +69,7 @@ def plotter_3D(edges):
 
     for e in edges:
     
-        nodes=[e.vert_a.coordinates,  e.vert_b.coordinates]
+        nodes=[e.vertices[0].coordinates,  e.vertices[1].coordinates]
         ax.plot(*zip(*nodes), color = 'b')
 
 
